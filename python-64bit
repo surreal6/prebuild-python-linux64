@@ -1,12 +1,9 @@
-FROM ubuntu:22.04
-
+FROM ubuntu:latest
 # Set environment variables to avoid prompts
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
-
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
 # Install build dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -26,18 +23,13 @@ RUN apt-get update && apt-get install -y \
     tk-dev \
     libxml2-dev \
     libxmlsec1-dev \
-    libbz2-dev \
-    liblzma-dev
-
+    libffi-dev
 # Download and extract Python source
 RUN wget https://www.python.org/ftp/python/3.12.4/Python-3.12.4.tgz
 RUN tar xzf Python-3.12.4.tgz
-
-# Configure, build, and install Python with shared library
+# Configure, build, and install Python
 WORKDIR /Python-3.12.4
-ENV CFLAGS="-fPIC --enable-shared"
-RUN ./configure --prefix=/usr/local
+RUN ./configure --enable-shared --prefix=/usr/local
 RUN make
 RUN mkdir -p /python-build
-
 CMD ["make", "install", "DESTDIR=/python-build"]
