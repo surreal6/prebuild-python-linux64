@@ -72,4 +72,4 @@ with tarfile.open("output/output.tar", 'r') as tar:
     # Extract all the contents to the specified directory
     tar.extractall(path="output/output")
 
-shutil.copytree("output/output/python-build/usr/local", "output/cpython-3.12.4-linux64")
+shutil.copytree("output/output/python-build/usr/local", "output/cpython-3.13.3-linux64")
